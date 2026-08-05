@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.security4media</groupId>
+    <artifactId>pgp-keys-map</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <name>Security4Media PGP Keys Map</name>
+    <description>
+        Single source of truth for the pgp-keys-map.list consumed by
+        pgpverify-maven-plugin across Security4Media's Maven repositories.
+        Packaged as a jar so it can be declared as a pgpverify-maven-plugin
+        plugin dependency and referenced via a classpath: keysMapLocation,
+        the same way org.simplify4u:pgp-keys-map is consumed upstream.
+    </description>
+
+    <organization>
+        <name>Security4Media</name>
+        <url>https://github.com/Security4Media</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/Security4Media/pgp-keys-map</url>
+    </scm>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <gpgpverify.keysMapLocation>${maven.multiModuleProjectDirectory}/src/main/resources/pgp-keys-map.list</gpgpverify.keysMapLocation>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>Security4Media PGP Keys Map Packages</name>
+            <url>https://maven.pkg.github.com/Security4Media/pgp-keys-map</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.simplify4u.plugins</groupId>
+                <artifactId>pgpverify-maven-plugin</artifactId>
+                <version>1.19.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <keysMapLocation>${gpgpverify.keysMapLocation}</keysMapLocation>
+                    <verifyPlugins>true</verifyPlugins>
+                    <verifyPluginDependencies>true</verifyPluginDependencies>
+                    <verifyAtypical>true</verifyAtypical>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
