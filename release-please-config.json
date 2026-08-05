@@ -1,0 +1,8 @@
+{
+  "release-type": "maven",
+  "bootstrap-sha": "PLACEHOLDER",
+  "release-as": "1.0.0",
+  "packages": {
+    ".": {}
+  }
+}

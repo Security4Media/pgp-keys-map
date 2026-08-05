@@ -1,0 +1,44 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: PR title lint
+
+# Advisory only (continue-on-error below): release-please only reacts to a Conventional-Commits
+# prefix, and since PRs are squash-merged, the PR title becomes the commit message it reads. This
+# check exists so a missing/wrong prefix is visible before merging, without blocking it - there's
+# no branch protection on this repo to make it a hard gate anyway.
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+    branches: [ "main" ]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-pr-title:
+    # release-please generates its own PR title (e.g. "chore(main): release x.y.z"), already
+    # conventional-commit-compliant - skip linting it.
+    if: github.head_ref != 'release-please--branches--main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@48f256284bd46cdaab1048c3721360e808335d50 # v6.1.1
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            deps
+            docs
+            chore
+            refactor
+            test
+            ci
