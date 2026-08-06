@@ -83,17 +83,3 @@ from. Every entry should be verified by actually running
 tree - it cryptographically verifies each artifact's signature and prints the
 exact `<coordinate> = <keyID>` line to add for anything not yet covered. Don't
 hand-write key IDs.
-
-## Known issue
-
-The `org.security4media.crypto:*:*:*` entry (jce-providers' own release key)
-needs verification: `c2pa-cmp-client`'s pre-existing local copy of this file
-has a different fingerprint for this same pattern than `jce-providers`' own
-copy does. This repo currently carries jce-providers' value. Confirm the
-actual current signing key before any project migrates onto this shared list.
-
-## Status
-
-This repo is new. `jce-providers`, `c2pa-cmp-client`, and `cmp-client-component`
-each still carry their own local copy of the list; migrating them onto this
-shared artifact is tracked as follow-up work per repo.
