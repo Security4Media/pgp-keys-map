@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/Security4Media/pgp-keys-map/compare/v1.1.0...v1.1.1) (2026-08-07)
+
+
+### Documentation
+
+* confirm v1.1.0 reached Maven Central, close out SETUP.md release items ([#10](https://github.com/Security4Media/pgp-keys-map/issues/10)) ([e9763b5](https://github.com/Security4Media/pgp-keys-map/commit/e9763b55ad0a7f8c78123a456e9308cd8b28f5dd))
+
 ## [1.1.0](https://github.com/Security4Media/pgp-keys-map/compare/v1.0.0...v1.1.0) (2026-08-07)
 
 
