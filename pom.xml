@@ -15,6 +15,8 @@
         the same way org.simplify4u:pgp-keys-map is consumed upstream.
     </description>
 
+    <url>https://github.com/Security4Media/pgp-keys-map</url>
+
     <organization>
         <name>Security4Media</name>
         <url>https://github.com/Security4Media</url>
@@ -28,7 +30,18 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <name>Security4Media</name>
+            <email>maintainers@security4media.org</email>
+            <organization>Security4Media</organization>
+            <organizationUrl>https://security4media.org</organizationUrl>
+        </developer>
+    </developers>
+
     <scm>
+        <connection>scm:git:https://github.com/Security4Media/pgp-keys-map.git</connection>
+        <developerConnection>scm:git:https://github.com/Security4Media/pgp-keys-map.git</developerConnection>
         <url>https://github.com/Security4Media/pgp-keys-map</url>
     </scm>
 
@@ -67,6 +80,31 @@
                     <verifyAtypical>true</verifyAtypical>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-source</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <version>2.9.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>makeAggregateBom</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -93,6 +131,47 @@
                                 <arg>--pinentry-mode</arg>
                                 <arg>loopback</arg>
                             </gpgArguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <!-- This project has no src/main/java - maven-javadoc-plugin's own jar
+                             goal silently skips ("No Javadoc in project. Archive not created.")
+                             rather than producing an artifact. Central Portal still requires a
+                             -javadoc.jar for jar-packaged uploads regardless of real content, so
+                             this packages src/main/javadoc's placeholder under the javadoc
+                             classifier instead. -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>empty-javadoc-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <classifier>javadoc</classifier>
+                                    <classesDirectory>${project.basedir}/src/main/javadoc</classesDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>central</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
                         </configuration>
                     </plugin>
                 </plugins>

@@ -1,5 +1,14 @@
 # pgp-keys-map
 
+<!-- maven-ci-standards:docs:start -->
+## Generating documentation locally
+
+This artifact packages a resource file (`pgp-keys-map.list`), not Java source, so there is no
+real Javadoc to generate (`mvn javadoc:javadoc` produces nothing here). Releases still attach a
+placeholder `-javadoc.jar` (see `src/main/javadoc/README.txt`) solely because Maven Central's
+upload validation requires one for jar-packaged artifacts.
+<!-- maven-ci-standards:docs:end -->
+
 Single source of truth for the `pgp-keys-map.list` used by
 [pgpverify-maven-plugin](https://github.com/s4u/pgpverify-maven-plugin) across
 Security4Media's Maven repositories (`jce-providers`, `cmp-client-component`,
