@@ -1,0 +1,44 @@
+{
+  "groups": {
+    "docs": {
+      "applied_at": "2026-08-07T14:14:20+00:00",
+      "enabled": true,
+      "files": {},
+      "settings": {
+        "attach_mechanism": "maven-jar-plugin-placeholder",
+        "attach_to_release_enabled": true,
+        "doclint_enabled": false,
+        "fail_on_warnings": false,
+        "jdk_version": "17",
+        "note": "No src/main/java in this repo, so maven-javadoc-plugin jar goal produces no artifact. Replaced with maven-jar-plugin packaging src/main/javadoc placeholder under the javadoc classifier, merged into the pre-existing release profile. README section text customized away from the generic template wording to describe this.",
+        "reactor_shape": "single-module",
+        "readme_section_written": true
+      }
+    },
+    "release": {
+      "applied_at": "2026-08-07T14:14:09+00:00",
+      "enabled": true,
+      "files": {
+        ".github/workflows/publish-maven-central.yml": "sha256:bf0105261335b3fc8e327b9d6252aa7e2349881947c6eade85436cf6d6d78a1e"
+      },
+      "settings": {
+        "bootstrap_sha": "7be2c8ae74d62fb252f478507832ac3378f3feab",
+        "cyclonedx_applied_by_this_group": true,
+        "initial_version": "1.0.0",
+        "jdk_version": "17",
+        "note": "release-please files and publish.yml left pre-existing/untouched; only publish-maven-central.yml newly tracked. It also has a workflow_dispatch backfill input for the pre-existing v1.0.0 release.",
+        "pr_title_lint_managed_by_plugin": false,
+        "pr_title_lint_strictness": "advisory",
+        "publish_github_packages": true,
+        "publish_github_packages_managed_by_plugin": false,
+        "publish_maven_central": true,
+        "release_please_enabled": true,
+        "release_please_managed_by_plugin": false,
+        "sbom_attached_to_github_packages_release": false,
+        "sbom_enabled": true,
+        "versioning": "single-shared"
+      }
+    }
+  },
+  "plugin_version": "0.4.0"
+}
