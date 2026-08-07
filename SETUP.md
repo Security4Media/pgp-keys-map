@@ -53,10 +53,35 @@ Run `gh variable list` in this repo to see what already exists. None currently r
   returns HTTP 200). Note: keys.openpgp.org withholds the UID/email from public search until
   verified via the confirmation link it emails to that address - fingerprint lookup (what Central
   Portal and this repo's own `pgp-keys-map.list` both key off) already works regardless of that.
-- [ ] The `v1.0.0` GitHub Release already exists and predates `publish-maven-central.yml`, so its
-  `release: created` event already fired and won't re-trigger the new workflow. Once the two
-  secrets above are set, backfill it manually: Actions -> "Publish package to Maven Central" ->
-  "Run workflow" -> tag `v1.0.0`. Future releases publish automatically.
+- [x] ~~Backfill the `v1.0.0` GitHub Release manually via `workflow_dispatch`~~ - tried, failed,
+  abandoned on purpose. The `v1.0.0` tag predates `publish-maven-central.yml` and PR #5's pom.xml
+  changes, so checking out that tag for the backfill gets a pom.xml with no `central`/source/
+  javadoc/SBOM plugins at all; Maven silently fell through to the GitHub Packages target instead
+  and 401'd on credentials meant for Central. Also, `pgp-keys-map.list` itself changed
+  functionally since that tag (duplicate entries merged, invalid `:*`-for-version entries fixed),
+  so republishing "1.0.0" from current content wouldn't be a faithful snapshot of what was
+  actually tagged anyway. Decision: leave `v1.0.0` unpublished on Central; the next real release
+  is the first one that reaches it. `publish-maven-central.yml` itself needs no code fix - every
+  future tag is cut from post-PR#5 main, so its checkout-by-ref logic is fine going forward.
+- [ ] **release-please was stuck failing on every push to `main`** (separate bug): a leftover
+  `"release-as": "1.0.0"` in `release-please-config.json` kept forcing every cycle back to a
+  version that already exists as a tag, so release creation failed with
+  `{"code":"already_exists","field":"tag_name"}` on every run since PR #5 merged. Fix is out for
+  review: PR for branch `worktree-release-please-fix` (removes the override).
+- [ ] **Once that fix merges, verify the next release-please run proposes a sane version bump**
+  (expect a minor bump, from PR #5's `feat:` commit) rather than silently no-op'ing. The failed
+  run still added the `autorelease: tagged` label to PR #6 before the actual release/tag creation
+  failed, so release-please's own bookkeeping may believe that commit point was already released
+  when it wasn't. If the next run doesn't propose anything, or proposes the wrong thing, check
+  that label on PR #6 first - may need removing it by hand.
+- [ ] Once a real release-please release cycle completes (merge its release PR, let it cut the
+  actual tag/GitHub Release), confirm both `publish.yml` and `publish-maven-central.yml` ran
+  successfully, then confirm the artifact resolves:
+  `curl -I https://repo.maven.apache.org/maven2/org/security4media/pgp-keys-map/<version>/pgp-keys-map-<version>.pom`
+  (allow up to ~30 min for Central to finish syncing). That's what actually closes
+  [issue #4](https://github.com/Security4Media/pgp-keys-map/issues/4) - the `v1.0.0` artifact
+  itself stays unresolvable per the decision above, but the repo's Central publishing works from
+  here forward.
 
 <!-- docs group -->
 - No secrets or variables are needed for the `docs` group.
