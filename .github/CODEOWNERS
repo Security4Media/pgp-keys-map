@@ -1,0 +1,2 @@
+# This file decides which artifact signatures get trusted org-wide - review changes carefully.
+src/main/resources/pgp-keys-map.list @Security4Media/security4media-devs
