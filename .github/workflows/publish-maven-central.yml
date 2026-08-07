@@ -1,0 +1,71 @@
+name: Publish package to Maven Central
+
+# Deliberately a SEPARATE workflow from publish.yml (GitHub Packages), not a conditional job
+# bolted onto it: this file's extra permissions/secrets (Central Portal user token) never touch
+# the existing GitHub Packages publish path.
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: >-
+          Existing release tag to (re-)publish, e.g. v1.0.0. Only needed to backfill a release
+          that predates this workflow (release: created only fires for releases created after
+          this workflow exists) or to retry a failed Central deploy without cutting a new release.
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # required by `gh release upload` below (attaching the SBOM)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # Writes ~/.m2/settings.xml's <server><id>central</id> entry, with the username/password
+          # sourced from the two env var NAMES below (not literal values) - matching the pom's
+          # <publishingServerId>central</publishingServerId>, so the plugin resolves credentials
+          # through settings.xml. The actual secret values are only ever supplied as env vars on
+          # the deploy step further down, never written into pom.xml.
+          server-id: central
+          server-username: CENTRAL_PORTAL_USERNAME
+          server-password: CENTRAL_PORTAL_TOKEN
+          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Set version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: mvn versions:set -DnewVersion="${RELEASE_TAG#v}"
+
+      # Both profiles together, on purpose: "release" (GPG signing + javadoc jar) + the main
+      # build's always-on source/cyclonedx plugins attach GPG-signed, sources, javadoc, and SBOM
+      # artifacts - Central Portal validation rejects an upload missing any of those - while
+      # "central" activates central-publishing-maven-plugin itself. `-P central` alone would not
+      # sign or attach anything.
+      - name: Publish to Maven Central
+        run: mvn -P release,central --batch-mode deploy -DskipTests -Ddependency-check.skip=true
+        env:
+          # Central Portal USER TOKENS, generated at https://central.sonatype.com/account (Account
+          # -> Generate User Token) - NOT a legacy Sonatype OSSRH/JIRA login, that flow was retired.
+          CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
+          CENTRAL_PORTAL_TOKEN: ${{ secrets.CENTRAL_PORTAL_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSPHRASE }}
+
+      # target/bom.json already exists at this point for free, since cyclonedx-maven-plugin's
+      # BOM goal is bound to the package phase, which `deploy` above already runs through.
+      - name: Attach SBOM to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: gh release upload "$RELEASE_TAG" target/bom.json --clobber
