@@ -22,10 +22,10 @@ only its name).
   artifacts. Required once GitHub Packages or Maven Central publishing is enabled (the `release`
   Maven profile signs every artifact it deploys). (already set)
 - [x] `GPG_SIGNING_KEY_PASSPHRASE`, the passphrase protecting the key above. (already set)
-- [ ] `CENTRAL_PORTAL_TOKEN`, a Central Portal **user token** pair generated at
+- [x] `CENTRAL_PORTAL_TOKEN`, a Central Portal **user token** pair generated at
   https://central.sonatype.com/account (Account -> Generate User Token), not a legacy Sonatype
-  OSSRH/JIRA login (that flow was retired). Required for Maven Central publishing.
-- [ ] `CENTRAL_PORTAL_USERNAME`, the other half of the same user token pair above.
+  OSSRH/JIRA login (that flow was retired). Required for Maven Central publishing. (already set)
+- [x] `CENTRAL_PORTAL_USERNAME`, the other half of the same user token pair above. (already set)
 
 <!-- other groups append their own secrets rows here -->
 
@@ -44,11 +44,7 @@ Run `gh variable list` in this repo to see what already exists. None currently r
   (`maintainers@security4media.org`) rather than an individual's name/email, so no one's
   personal address ends up permanently public on Central - confirm that mailbox actually
   exists and is monitored before the first real Central deploy.
-- [ ] **One-time Central Portal namespace verification for `org.security4media`.** Create/sign in
-  to a Sonatype Central Portal account at https://central.sonatype.com, then verify ownership of
-  the `org.security4media` namespace (typically via a DNS TXT record on a domain you control, or
-  by proving ownership of the `Security4Media` GitHub org if using the `io.github.*`-style
-  verification - check Central Portal's current namespace docs for the GitHub-org path). This
+- [x] **One-time Central Portal namespace verification for `org.security4media`.** Done. This
   gates every future Central deploy under this groupId, not just this repo's.
 - [x] Publish the same GPG key's **public** key to a public keyserver. Done:
   `448C17164DA1EF787059C31C176E655BBA8686E3` (Security4Media Releases
