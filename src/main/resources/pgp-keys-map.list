@@ -1497,10 +1497,9 @@ xpp3                            = noSig
 ### Build/test tooling
 me.fabriciorby:maven-surefire-junit5-tree-reporter:*:* = 0x5AC722478DC74B6A1D2060C42FD5650BA06F549E
 
-# jce-providers' release-signing key. Verified 2026-08-07: matches the "Security4Media
-# Releases" key published to keys.openpgp.org for this org's other repos (an earlier local
-# copy elsewhere carried a different, unrelated fingerprint - that was a personal key, not
-# this org key, and has been ruled out).
+# Security4Media's shared release-signing key, confirmed 2026-08-07 against the "Security4Media
+# Releases" key published to keys.openpgp.org. An earlier local copy of this file listed a
+# different fingerprint here; that turned out to be someone's personal key, not this org key.
 org.security4media.crypto:*:*:*            = 0x448C17164DA1EF787059C31C176E655BBA8686E3
 
 ### AWS SDK (transitive dependency of Security4Media components)

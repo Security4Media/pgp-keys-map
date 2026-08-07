@@ -41,9 +41,9 @@ Run `gh variable list` in this repo to see what already exists. None currently r
   publishing. (already present)
 - [x] `<url>`, `<licenses>`, `<developers>`, and `<scm>` added/verified in `pom.xml` for Central
   Portal's upload validation. `<developers>` deliberately uses an org-level identity
-  (`maintainers@security4media.org`) rather than an individual's name/email, per data-minimization
-  preference - confirm that mailbox actually exists and is monitored before the first real
-  Central deploy.
+  (`maintainers@security4media.org`) rather than an individual's name/email, so no one's
+  personal address ends up permanently public on Central - confirm that mailbox actually
+  exists and is monitored before the first real Central deploy.
 - [ ] **One-time Central Portal namespace verification for `org.security4media`.** Create/sign in
   to a Sonatype Central Portal account at https://central.sonatype.com, then verify ownership of
   the `org.security4media` namespace (typically via a DNS TXT record on a domain you control, or
@@ -66,3 +66,24 @@ Run `gh variable list` in this repo to see what already exists. None currently r
 - No secrets or variables are needed for the `docs` group.
 
 <!-- other groups append their own rows here -->
+
+## Future: making this repo public
+
+Not started. Written up here as a checklist for whenever it's actually triggered - do not
+execute any of this without a fresh, explicit go-ahead.
+
+- [ ] **Resolve everything in flight first.** Merge or close every open PR, and check for other
+  active branches/sessions on this repo before deleting anything. Never delete a branch you
+  didn't create without confirming with whoever owns it.
+- [ ] **Decide on the commit history separately from "going public."** Squashing `main` to one
+  commit doesn't just remove old messages - `release-please` reads conventional-commit history
+  to generate changelogs, so squashing breaks that going forward, not just retroactively.
+  The actual content leaks (sibling-repo names in prose) are already fixed directly in the
+  files, not in the commit history. If specific strings still need scrubbing from history,
+  use a targeted `git filter-repo` pass on just those strings, not a full squash.
+- [ ] **Delete only confirmed-stale branches**, after the step above.
+- [ ] **Flip visibility**: `gh repo edit --visibility public`.
+- [ ] **Add real branch protection** requiring the `CODEOWNERS` review on
+  `pgp-keys-map.list` - this becomes available once the repo is public (or the org upgrades
+  off the current plan), and is a hard gate rather than the review-visibility-only signal
+  `CODEOWNERS` provides today.
