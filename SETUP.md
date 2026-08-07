@@ -93,19 +93,20 @@ Run `gh variable list` in this repo to see what already exists. None currently r
 
 ## Future: making this repo public
 
-Not started. Written up here as a checklist for whenever it's actually triggered - do not
-execute any of this without a fresh, explicit go-ahead.
+In progress.
 
-- [ ] **Resolve everything in flight first.** Merge or close every open PR, and check for other
-  active branches/sessions on this repo before deleting anything. Never delete a branch you
-  didn't create without confirming with whoever owns it.
-- [ ] **Decide on the commit history separately from "going public."** Squashing `main` to one
-  commit doesn't just remove old messages - `release-please` reads conventional-commit history
-  to generate changelogs, so squashing breaks that going forward, not just retroactively.
-  The actual content leaks (sibling-repo names in prose) are already fixed directly in the
-  files, not in the commit history. If specific strings still need scrubbing from history,
-  use a targeted `git filter-repo` pass on just those strings, not a full squash.
-- [ ] **Delete only confirmed-stale branches**, after the step above.
+- [x] **Resolve everything in flight first.** Done: PRs #9 and #10 merged, nothing left open.
+- [x] **Decide on the commit history separately from "going public."** Went with a targeted
+  `git filter-repo --message-callback` pass (not a full squash) rewording exactly 2 commit
+  messages that named sibling repos (`7be2c8a` bootstrap, `4c289fc` the fix that removed those
+  names from file content but re-mentioned them describing the removal). Verified before pushing:
+  same 23 commits, every tree byte-identical, only those 2 messages changed, both tags
+  (`v1.0.0`, `v1.1.0`) correctly follow the rewrite. Force-pushed to `main` and both tags.
+  `release-please`'s changelog-relevant history is otherwise untouched. Issue #4's body (a
+  separate leak, not in git history) was also edited to remove the same references.
+- [x] **Delete only confirmed-stale branches.** Done: `worktree-maven-central-publish` and
+  `worktree-release-please-fix` (both already merged) deleted. `release-please--branches--main`
+  left alone - release-please manages that branch's lifecycle itself, it's not stale.
 - [ ] **Flip visibility**: `gh repo edit --visibility public`.
 - [ ] **Add real branch protection** requiring the `CODEOWNERS` review on
   `pgp-keys-map.list` - this becomes available once the repo is public (or the org upgrades
