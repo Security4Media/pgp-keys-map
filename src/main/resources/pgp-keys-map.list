@@ -14,6 +14,26 @@
 # limitations under the License.
 #
 
+# Sections (search for the "##"/"###" text below to jump to one):
+#   ## Unqualified / pre-reverse-domain groupIds
+#   ## Apache Commons (commons-*)
+#   ## com.*                          ### Google   ### Sun / Oracle
+#   ## Misc. single/few-entry groupIds (de.*, dev.*, dnsjava, ...)
+#   ## io.*
+#   ## jakarta.* (Jakarta EE specs)
+#   ## javax.* (legacy Java/Jakarta EE specs)
+#   ## Misc. single-vendor legacy libraries (jaxen, jgraph, ...)
+#   ## log4j / logkit / mysql / nekohtml
+#   ## net.*
+#   ## Misc. (msv, ognl, one.util)
+#   ## org.*                          ### Apache Software Foundation
+#                                      ### Codehaus   ### Eclipse Foundation
+#                                      ### GlassFish  ### Sonatype  ### Spring
+#   ## Misc. single-vendor legacy libraries (oro, plexus, regexp, ...)
+#   ## Apache Xalan / Xerces / XML-APIs
+#   ## Security4Media-curated additions (not part of the upstream list above)
+
+## Unqualified / pre-reverse-domain groupIds (ant, antlr, asm, ...)
 ant                             = noSig
 
 ant-contrib                     = noSig
@@ -50,6 +70,7 @@ ch.ethz.ganymed                = noSig
 
 classworlds                     = noSig
 
+## Apache Commons (legacy hyphenated groupId: commons-*)
 commons-beanutils:*:(,1.7.0]    = noSig
 commons-beanutils               = \
                                   0x2DB4F1EF0FA761ECC4EA935C86FDC7E2A11262CB, \
@@ -131,6 +152,7 @@ commons-validator               = \
                                   0xD196A5E3E70732EEB2E5007F1861C322C56014B2, \
                                   0xD6F1BC78607808EC8E9F69437A8860944FAD5F62
 
+## com.*
 com.aoapps                      = 0x3FF945C37048D113E997AEC7CE70AA9A5BD10E01
 com.aoapps.platform             = 0x3FF945C37048D113E997AEC7CE70AA9A5BD10E01
 
@@ -188,6 +210,7 @@ com.github.stephenc.jcip        = 0x042B29E928995B9DB963C636C7CA19B7B620D787
 
 com.github.virtuald             = 0x1D657819C1D8DE42D96881C1D5C6377EDE50786B
 
+### Google
 com.google.code.findbugs:jsr305:(,2.0.1] = noSig
 com.google.code.findbugs        = 0x7616EB882DAF57A11477AAF559A252FB1199D873
 
@@ -306,19 +329,22 @@ com.stripe:stripe-java          = \
                                   0x13A4324B0B93CA280A36CBFD0D50EC67EBBEE268, \
                                   !0xC33033E4B583FE612EDE877C05D02D3D57ABFF46
 
+### Sun / Oracle (legacy Java EE reference implementations)
 com.sun.activation              = 0xCAE38BC93D90B852D88465DD3A1959EEF8726006
 
-com.sun.istack                  = 0x70CD19BFD9F6C330027D6F260315BFB7970A144F
+com.sun.istack                  = \
+                                  0x06A4D15D9FA796BA5DECF592CE8B1D1D2530EDC5, \
+                                  0x70CD19BFD9F6C330027D6F260315BFB7970A144F
 
 com.sun.mail:jakarta.mail       = 0x9D58EA982B3FB7BB8A9488F47E0DC505BB5D48AF
 
 com.sun.mail:javax.mail         = 0x4F7E32D440EF90A83011A8FC6425559C47CC79C4
 
-com.sun.xml.fastinfoset         = 0x06A4D15D9FA796BA5DECF592CE8B1D1D2530EDC5
+com.sun.xml.fastinfoset         = \
+                                  0x06A4D15D9FA796BA5DECF592CE8B1D1D2530EDC5, \
+                                  0x70CD19BFD9F6C330027D6F260315BFB7970A144F
 
 com.sun.xml.stream.buffer       = 0xB506C29E4B7EF88CE0F0E6D3A7C6AFD280CA7CF0
-
-com.sun.istack                  = 0x06A4D15D9FA796BA5DECF592CE8B1D1D2530EDC5
 
 com.sun.jersey.*                = 0xF97C2E386E2C4EFC7C3F98EE2D910134368593F3
 
@@ -333,8 +359,6 @@ com.sun.xml.bind                = \
                                   0x4F332021E20F59100C978257021E3BE573F727ED
 
 com.sun.xml.bind.external       = 0x06A4D15D9FA796BA5DECF592CE8B1D1D2530EDC5
-
-com.sun.xml.fastinfoset         = 0x70CD19BFD9F6C330027D6F260315BFB7970A144F
 
 com.sun.xml.messaging.saaj      = 0xB506C29E4B7EF88CE0F0E6D3A7C6AFD280CA7CF0
 
@@ -363,6 +387,8 @@ com.zaxxer:SparseBitSet         = \
                                   0x9579802DC3E15DE9C389239FC0D48A119CE7EE7B, \
                                   0xF3A90E6B10E809F851AB4FC54CC08E7F47C3EC76
 
+## Misc. single/few-entry groupIds (de.*, dev.*, dnsjava, dom4j, doxia,
+## edu.*, eu.*, geronimo-spec, guru.*, info.*, informa)
 de.danielbechler                = 0x476E96B433F354264ED7C37848F3F13498FF6AF8
 
 de.tototec                      = 0x8D6970C647A97F8D0554A16CE81745C4A736E2DB
@@ -395,6 +421,7 @@ info.picocli                    = \
 
 informa:informa                 = noSig
 
+## io.*
 io.airlift                      = 0x9E93DB1192CEE3D3B581AABB37E9D58EA4598641
 
 io.dropwizard.*                 = 0xEDA86E9FB607B5FC9223FB767D4868B53E31E7AD
@@ -453,6 +480,7 @@ isorelax                        = noSig
 
 it.unimi.dsi                    = 0x0CB5871FB7BF3B351614BBF6CA85FFE638D4407A
 
+## jakarta.* (Jakarta EE specs)
 jakarta.activation              = 0xCAE38BC93D90B852D88465DD3A1959EEF8726006 # master key
 jakarta.annotation              = 0xF6CE460FDBE1AABD1A96456737ECFC571637667C # master key
 
@@ -503,6 +531,7 @@ jakarta.ws.rs                   = 0x4BD9AEC34B75BE14431C8878160A876EB62C9DBE
 
 jalopy                          = noSig
 
+## javax.* (legacy Java/Jakarta EE specs, pre-rename)
 javax.activation:activation     = noSig
 javax.activation                = 0x4F7E32D440EF90A83011A8FC6425559C47CC79C4
 
@@ -568,6 +597,8 @@ javax.xml.rpc                   = 0x4F7E32D440EF90A83011A8FC6425559C47CC79C4
 
 javax.xml.stream                = noSig
 
+## Misc. single-vendor legacy libraries (jaxen, jgraph, jsch, jline,
+## joda-time, jdom, jtidy, junit)
 jaxen:jaxen:(,1.1.1]            = noSig
 jaxen                           = \
                                   0x656A225FC79CE5CBBD7DD5BFA7F5ED0FA05D64B7, \
@@ -598,6 +629,7 @@ junit                           = \
                                   0xAED3727A7DC070975D8C5009C7CB325467893CC4, \
                                   0xFF6E2C001948C5F2F38B0CC385911F425EC61B51
 
+## log4j / logkit / mysql / nekohtml (misc.)
 log4j:log4j:(,1.2.14]           = noSig
 log4j:log4j:pom:1.2.15          = noSig
 log4j:log4j:1.2.15              = 0xA1A2B5546D4331B2A41E1C07BE16C95D2E114322
@@ -611,6 +643,7 @@ mysql:mysql-connector-java:[8.0.28,8.0.30] = 0x859BE8D7C586F538430B19C2467B942D3
 
 nekohtml                        = noSig
 
+## net.*
 net.arnx                        = 0xEA1CC8EB96ACB305D55872774330D21C2BC8B5E3
 
 net.bytebuddy                   = \
@@ -662,6 +695,7 @@ net.sourceforge.pmd:*:7.7.0     = \
 net.sourceforge.pmd             = 0x2EFA55D0785C31F956F2F87EA0B5CA1A4E086838, \
                                   0x912E716EF6D98746F8EEB4D182DE7BE82166E84E
 
+## Misc. (msv, ognl, one.util)
 msv                             = noSig
 
 ognl:ognl:(,2.7.3]              = noSig
@@ -671,6 +705,7 @@ ognl:ognl:[3.0.1,)              = 0x0E008698344E62B90633B7C62841610663AFBB1F
 
 one.util                        = 0xDCC3D5116C91653E8A01EE1624C4E4EE1AC60DFB
 
+## org.*
 org.abego.treelayout            = 0xD790F72EA8FD39551012B62DCF9F3090CE4CB752
 
 org.antlr:antlr:(,3.4-beta4]                  = noSig
@@ -688,6 +723,7 @@ org.antlr                       = \
                                   0xB01128C8FD304FE48E6EED2C347CD0EAED975C5F, \
                                   0xD54A395B5CF3F86EB45F6E426B1B008864323B92
 
+### Apache Software Foundation (org.apache.*)
 org.apache.activemq.*           = \
                                   0x1AA8CF92D409A73393D0B736BFF2EE42C8282E76
 
@@ -953,6 +989,7 @@ org.bouncycastle                = \
 org.checkerframework            = 0x19BEAB2D799C020F17C69126B16698A4ADF4D638
 
 
+### Codehaus (org.codehaus.*)
 org.codehaus.gmaven.*           = \
                                   0x045B3D6AE9500CE0F930DFE48D948CAF35543C27, \
                                   0x0DCF749D41A80E58041AAE1728F57F70167C0B3A
@@ -1046,6 +1083,7 @@ org.dom4j                       = 0x8F9A3C6D105B9F57844A721D79E193516BE7998F
 
 org.easymock                    = 0xE85AED155021AF8A6C6B7A4A7C7D8456294423BA
 
+### Eclipse Foundation (org.eclipse.*)
 org.eclipse.aether              = \
                                   0x503BFAAE645286D11EC18181F704B943ED330E1B, \
                                   0xBA926F64CA647B6D853A38672E2010F8A7FF4A41, \
@@ -1089,6 +1127,7 @@ org.freemarker                  = 0x13AC2213964ABE1D1C147C0E1939A2520BAB1D90
 
 org.fusesource.hawtbuf          = 0xE5B8247AF8A619A28F90FDFC9FF25980F5BA7E4F
 
+### GlassFish / Jakarta EE reference implementation (org.glassfish.*)
 org.glassfish                   = 0x7AA34304FF173025AA394C7C2C026998703FFA67
 
 org.glassfish:javax.json        = \
@@ -1310,6 +1349,7 @@ org.smooks.*                    = \
                                   0xCD3DEDD153E8EA8C1DCC7D768989D427C62B9674, \
                                   0x70AAA039F84946A2D494B4E9BCA0F51125CD0AEF
 
+### Sonatype (org.sonatype.*)
 org.sonatype.goodies            = 0x0DCF749D41A80E58041AAE1728F57F70167C0B3A
 
 org.sonatype.gossip             = \
@@ -1334,6 +1374,7 @@ org.sonatype.*                  = \
 
 org.spockframework.*            = 0x76E94E8FF0AB5AF3B6F8366972FEFD1572EB75E1
 
+### Spring (org.springframework.*)
 org.springframework.*           = \
                                   0x48B086A7D843CFA258E83286928FBF39003C0425, \
                                   0x8756C4F765C9AC3CB6B85D62379CE192D401AB61, \
@@ -1374,8 +1415,9 @@ org.webjars                     = \
                                   0x82F94BBDF95C247BBD21396B9A0B94DEC0FFA7EE, \
                                   0xFA1703B1D287CAEA3A60F931E0130A3ED5A2079E
 
-org.webjars.npm                 = 0x33C4D7C209080D60CA2CDDBC5AF2C7818C7B0958
-org.webjars.npm                 = 0xFA1703B1D287CAEA3A60F931E0130A3ED5A2079E
+org.webjars.npm                 = \
+                                  0x33C4D7C209080D60CA2CDDBC5AF2C7818C7B0958, \
+                                  0xFA1703B1D287CAEA3A60F931E0130A3ED5A2079E
 
 org.xerial.snappy               = \
                                   0x56B505DC8A29C69138A430B9429C8816DEA04CDB, \
@@ -1389,6 +1431,8 @@ org.xmlunit                     = 0xBC26C53AF531F8B4B3F5930AAFBD3AF8EAFA72DA, \
 org.yaml                        = 0x120D6F34E627ED3A772EBBFE55C7E5E701832382, \
                                   0x2FC53E6B1F681184F4CCD637F5C81DE10A0B8ECC
 
+## Misc. single-vendor legacy libraries (oro, plexus, regexp, rome, saxpath,
+## slide, sslext, stax, taglibs, tools.jackson.core, velocity, wsdl4j)
 oro                             = noSig
 
 plexus                          = noSig
@@ -1418,6 +1462,7 @@ wsdl4j:wsdl4j:(,1.6.2]          = noSig
 wsdl4j:wsdl4j                   = 0xE0F0B2635D0423169D92664FFB633DE8F5CBAE6B
 wsdl4j:wsdl4j-qname             = noSig
 
+## Apache Xalan / Xerces / XML-APIs (legacy XML tooling, hyphenated groupIds)
 xalan:serializer:2.7.1          = noSig
 xalan:serializer:[2.7.2,)       = \
                                   0x2DB4F1EF0FA761ECC4EA935C86FDC7E2A11262CB, \
@@ -1445,13 +1490,20 @@ xmlunit                         = 0xCE8075A251547BEE249BC151A2115AE15F6B8B72
 
 xpp3                            = noSig
 
+## ------------------------------------------------------------------
+## Security4Media-curated additions below (not part of the upstream
+## org.simplify4u community list above)
+## ------------------------------------------------------------------
+### Build/test tooling
 me.fabriciorby:maven-surefire-junit5-tree-reporter:*:* = 0x5AC722478DC74B6A1D2060C42FD5650BA06F549E
 
-# TODO: verify against jce-providers' actual current release-signing key before any
-# consumer migrates onto this shared list - c2pa-cmp-client's local copy of this file
-# has a different fingerprint (0xE001DE499DBDF0C0731C6D48778914DC1DB3B720) for this
-# same pattern. This entry was carried over from jce-providers' own pgp-keys-map.list.
+# jce-providers' release-signing key. Verified 2026-08-07: matches the "Security4Media
+# Releases" key published to keys.openpgp.org for this org's other repos (an earlier local
+# copy elsewhere carried a different, unrelated fingerprint - that was a personal key, not
+# this org key, and has been ruled out).
 org.security4media.crypto:*:*:*            = 0x448C17164DA1EF787059C31C176E655BBA8686E3
+
+### AWS SDK (transitive dependency of Security4Media components)
 software.amazon.awssdk:*:*      = 0xFEB9209F2F2F3F4664841E55AC107B386692DADD
 software.amazon.eventstream:*:* = 0xFEB9209F2F2F3F4664841E55AC107B386692DADD
 

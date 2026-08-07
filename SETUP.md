@@ -50,11 +50,13 @@ Run `gh variable list` in this repo to see what already exists. None currently r
   by proving ownership of the `Security4Media` GitHub org if using the `io.github.*`-style
   verification - check Central Portal's current namespace docs for the GitHub-org path). This
   gates every future Central deploy under this groupId, not just this repo's.
-- [ ] Publish the same GPG key's **public** key to a public keyserver, e.g.
-  `gpg --keyserver keys.openpgp.org --send-keys <KEY_ID>` (keys.openpgp.org is a reasonable
-  default; Central Portal's own validation also accepts keyserver.ubuntu.com and pgp.mit.edu).
-  Required for Maven Central; was not required for the existing GitHub Packages publishing, so
-  may not have been done yet even though `GPG_SIGNING_KEY` is already set.
+- [x] Publish the same GPG key's **public** key to a public keyserver. Done:
+  `448C17164DA1EF787059C31C176E655BBA8686E3` (Security4Media Releases
+  &lt;releases@security4media.org&gt;) sent to `keys.openpgp.org` and confirmed resolvable by
+  fingerprint (`https://keys.openpgp.org/vks/v1/by-fingerprint/448C17164DA1EF787059C31C176E655BBA8686E3`
+  returns HTTP 200). Note: keys.openpgp.org withholds the UID/email from public search until
+  verified via the confirmation link it emails to that address - fingerprint lookup (what Central
+  Portal and this repo's own `pgp-keys-map.list` both key off) already works regardless of that.
 - [ ] The `v1.0.0` GitHub Release already exists and predates `publish-maven-central.yml`, so its
   `release: created` event already fired and won't re-trigger the new workflow. Once the two
   secrets above are set, backfill it manually: Actions -> "Publish package to Maven Central" ->
