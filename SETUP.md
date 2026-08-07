@@ -63,25 +63,28 @@ Run `gh variable list` in this repo to see what already exists. None currently r
   actually tagged anyway. Decision: leave `v1.0.0` unpublished on Central; the next real release
   is the first one that reaches it. `publish-maven-central.yml` itself needs no code fix - every
   future tag is cut from post-PR#5 main, so its checkout-by-ref logic is fine going forward.
-- [ ] **release-please was stuck failing on every push to `main`** (separate bug): a leftover
+- [x] **release-please was stuck failing on every push to `main`** (separate bug): a leftover
   `"release-as": "1.0.0"` in `release-please-config.json` kept forcing every cycle back to a
   version that already exists as a tag, so release creation failed with
-  `{"code":"already_exists","field":"tag_name"}` on every run since PR #5 merged. Fix is out for
-  review: PR for branch `worktree-release-please-fix` (removes the override).
-- [ ] **Once that fix merges, verify the next release-please run proposes a sane version bump**
-  (expect a minor bump, from PR #5's `feat:` commit) rather than silently no-op'ing. The failed
-  run still added the `autorelease: tagged` label to PR #6 before the actual release/tag creation
-  failed, so release-please's own bookkeeping may believe that commit point was already released
-  when it wasn't. If the next run doesn't propose anything, or proposes the wrong thing, check
-  that label on PR #6 first - may need removing it by hand.
-- [ ] Once a real release-please release cycle completes (merge its release PR, let it cut the
-  actual tag/GitHub Release), confirm both `publish.yml` and `publish-maven-central.yml` ran
-  successfully, then confirm the artifact resolves:
-  `curl -I https://repo.maven.apache.org/maven2/org/security4media/pgp-keys-map/<version>/pgp-keys-map-<version>.pom`
-  (allow up to ~30 min for Central to finish syncing). That's what actually closes
-  [issue #4](https://github.com/Security4Media/pgp-keys-map/issues/4) - the `v1.0.0` artifact
-  itself stays unresolvable per the decision above, but the repo's Central publishing works from
-  here forward.
+  `{"code":"already_exists","field":"tag_name"}` on every run since PR #5 merged. Fixed in PR #7
+  (merged): override removed.
+- [x] **Verified the next release-please run proposed a sane version bump.** It did - `1.1.0`
+  (minor, from PR #5's `feat:` commit), via PR #8 (merged). The stray `autorelease: tagged` label
+  left on PR #6 didn't cause any problem in practice.
+- [x] **`v1.1.0` tagged, both publish workflows ran, artifact confirmed on Central.**
+  `publish.yml` (GitHub Packages) succeeded outright. `publish-maven-central.yml`'s run itself
+  shows as **cancelled**, not successful - but that's misleading: the actual upload/signing/bundle
+  steps all completed and Central Portal confirmed the deployment would auto-publish; the run was
+  only cancelled while it sat in the `waitUntil: published` polling step afterward (cancelled
+  intentionally, not a failure). Confirmed directly:
+  `curl -I https://repo.maven.apache.org/maven2/org/security4media/pgp-keys-map/1.1.0/pgp-keys-map-1.1.0.pom`
+  → `200`. `v1.0.0` itself stays `404` per the decision above - `1.1.0` is the first version that
+  actually reaches Central, which is what resolves
+  [issue #4](https://github.com/Security4Media/pgp-keys-map/issues/4).
+- [x] The cancelled run also skipped its "Attach SBOM to release" step (it ran after the step
+  that got cancelled). Attached by hand: `gh release upload v1.1.0 target/bom.json`, built from
+  the same `1.1.0` source. Nothing to do here going forward - a run that completes normally
+  attaches it automatically.
 
 <!-- docs group -->
 - No secrets or variables are needed for the `docs` group.
