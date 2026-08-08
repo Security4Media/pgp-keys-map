@@ -1,5 +1,15 @@
 # pgp-keys-map
 
+<!-- maven-ci-standards:badges:start -->
+[![build](https://github.com/Security4Media/pgp-keys-map/actions/workflows/build-test.yml/badge.svg?branch=main)](https://github.com/Security4Media/pgp-keys-map/actions/workflows/build-test.yml?query=branch%3Amain)
+[![vulnerabilities](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/BadrTad/2561f0cb8277be7395802851def325bd/raw/vulnerabilities.json)](https://github.com/Security4Media/pgp-keys-map/actions/workflows/security-scan.yml?query=branch%3Amain)
+[![release](https://img.shields.io/github/v/release/Security4Media/pgp-keys-map)](https://github.com/Security4Media/pgp-keys-map/releases/latest)
+[![sbom](https://img.shields.io/badge/sbom-cyclonedx-blue)](https://github.com/Security4Media/pgp-keys-map/releases/latest)
+[![license](https://img.shields.io/github/license/Security4Media/pgp-keys-map)](LICENSE)
+[![license compliance](https://github.com/Security4Media/pgp-keys-map/actions/workflows/license-compliance.yml/badge.svg?branch=main)](https://github.com/Security4Media/pgp-keys-map/actions/workflows/license-compliance.yml?query=branch%3Amain)
+[![docs](https://img.shields.io/badge/docs-javadoc-blue)](README.md#generating-documentation-locally)
+<!-- maven-ci-standards:badges:end -->
+
 <!-- maven-ci-standards:docs:start -->
 ## Generating documentation locally
 

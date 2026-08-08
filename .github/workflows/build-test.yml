@@ -1,0 +1,61 @@
+name: Build and test
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  # Manual escape hatch: lets someone re-run the build/coverage badge on demand without a new
+  # commit, if a push ever silently fails to schedule a run at all.
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build and package
+    # Skip while the PR is still a draft - it'll run once marked ready for review.
+    # Also skip release-please's own PR - it only ever touches
+    # pom.xml's version and CHANGELOG.md, and a dedicated, lightweight compile check runs for
+    # it instead (release-pr-compile-check.yml). github.event.pull_request/head_ref are unset
+    # for the push trigger, so both clauses short-circuit to always-true there.
+    if: >-
+      (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+      && github.head_ref != 'release-please--branches--main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # required by advanced-security/maven-dependency-submission-action below
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up JDK 17
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # dependency-check (security group) is intentionally skipped here if present in the pom -
+      # it has its own dedicated workflow/schedule, and re-running it on every build+test push
+      # would duplicate that job's NVD-mirror lookups for no benefit.
+      - name: Build, test and package
+        run: mvn -B verify -Ddependency-check.skip=true
+
+      # Uploads the full dependency graph to GitHub to improve the quality of Dependabot
+      # alerts this repository can receive. Requires contents: write above; on a pull_request
+      # from a fork, GITHUB_TOKEN is always read-only regardless of the permissions requested
+      # here, so this step is expected to no-op/fail quietly on fork PRs - that's a GitHub
+      # platform restriction, not a bug in this workflow.
+      - name: Update dependency graph
+        continue-on-error: true   # best-effort: also fails if the repo's Dependency graph
+          # feature is administratively disabled (org policy), not just on fork PRs where
+          # GITHUB_TOKEN is read-only - either way, this enhances Dependabot alert quality,
+          # it isn't a build-correctness signal and shouldn't be able to block a merge.
+        uses: advanced-security/maven-dependency-submission-action@b275d12641ac2d2108b2cbb7598b154ad2f2cee8 # v5
