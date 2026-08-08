@@ -16,7 +16,7 @@
 
 ### Documentation
 
-* update SETUP.md with backfill decision and release-please fix status ([7ae510a](https://github.com/Security4Media/pgp-keys-map/commit/7ae510a47891a04b3ff41cd31812703ae8dd757c))
+* record the Maven Central backfill decision and release-please fix status ([7ae510a](https://github.com/Security4Media/pgp-keys-map/commit/7ae510a47891a04b3ff41cd31812703ae8dd757c))
 
 ## [1.0.0](https://github.com/Security4Media/pgp-keys-map/compare/v1.0.0...v1.0.0) (2026-08-07)
 
