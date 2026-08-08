@@ -56,16 +56,8 @@ jobs:
       - name: Publish to Maven Central
         run: mvn -P release,central --batch-mode deploy -DskipTests -Ddependency-check.skip=true
         env:
-          # Central Portal USER TOKENS, generated at https://central.sonatype.com/account (Account
-          # -> Generate User Token) - NOT a legacy Sonatype OSSRH/JIRA login, that flow was retired.
+          # Central Portal USER TOKENS, generated at https://central.sonatype.com/account
+          # NOT a legacy Sonatype OSSRH/JIRA login, that flow was retired.
           CENTRAL_PORTAL_USERNAME: ${{ secrets.CENTRAL_PORTAL_USERNAME }}
           CENTRAL_PORTAL_TOKEN: ${{ secrets.CENTRAL_PORTAL_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_SIGNING_KEY_PASSPHRASE }}
-
-      # target/bom.json already exists at this point for free, since cyclonedx-maven-plugin's
-      # BOM goal is bound to the package phase, which `deploy` above already runs through.
-      - name: Attach SBOM to release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
-        run: gh release upload "$RELEASE_TAG" target/bom.json --clobber

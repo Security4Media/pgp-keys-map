@@ -105,6 +105,30 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>12.2.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <formats>
+                        <format>HTML</format>
+                        <format>SARIF</format>
+                        <format>JSON</format>
+                    </formats>
+                    <failBuildOnCVSS>7</failBuildOnCVSS>
+                    <suppressionFiles>resources/dependency-check-suppress.xml</suppressionFiles>
+                    <ossIndexUsername>${env.OSS_INDEX_USERNAME}</ossIndexUsername>
+                    <ossIndexPassword>${env.OSS_INDEX_PASSWORD}</ossIndexPassword>
+                    <nvdApiKey>${env.NVD_API_KEY}</nvdApiKey>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

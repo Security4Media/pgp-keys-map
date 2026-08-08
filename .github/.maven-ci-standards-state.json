@@ -1,5 +1,47 @@
 {
   "groups": {
+    "badges": {
+      "applied_at": "2026-08-08T12:31:21+00:00",
+      "enabled": true,
+      "files": {
+        "README.md": "sha256:90547d232ac2b987248b203d04c5360aa1a066942d931980b01b322c5df8b1b5"
+      },
+      "settings": {
+        "build_workflow_file": "build-test.yml",
+        "gist_id": "2561f0cb8277be7395802851def325bd",
+        "gist_user": "BadrTad",
+        "license_file": "LICENSE",
+        "license_name": "Apache-2.0",
+        "note": "coverage/pmd/spotbugs excluded - no Java source in this repo. pgp-keys-map badge excluded - this repo IS the shared list, doesn't depend on one.",
+        "pgp_keys_map_label": null,
+        "pgp_keys_map_url": null,
+        "repo_visibility": "PUBLIC",
+        "selected_badges": [
+          "build",
+          "vulnerabilities",
+          "release",
+          "sbom",
+          "license",
+          "license-compliance",
+          "docs"
+        ]
+      }
+    },
+    "code-quality": {
+      "applied_at": "2026-08-08T15:54:44+00:00",
+      "enabled": true,
+      "files": {
+        ".github/workflows/build-test.yml": "sha256:70d7bfe7033914ff5b3c9423e0b31b85ae88d69e540082d887a1c1b1678d78bb"
+      },
+      "settings": {
+        "coverage_enabled": false,
+        "jdk_version": "17",
+        "note": "All three tools declined - no Java source. build-test.yml is now hand-maintained (trimmed of template comments); junit-summary.py and its step were removed since there's nothing to test/summarize. Update dependency graph step is continue-on-error (Dependency graph disabled at the org/repo level).",
+        "pmd_enabled": false,
+        "reactor_shape": "single-module",
+        "spotbugs_enabled": false
+      }
+    },
     "docs": {
       "applied_at": "2026-08-07T14:14:20+00:00",
       "enabled": true,
@@ -13,6 +55,29 @@
         "note": "No src/main/java in this repo, so maven-javadoc-plugin jar goal produces no artifact. Replaced with maven-jar-plugin packaging src/main/javadoc placeholder under the javadoc classifier, merged into the pre-existing release profile. README section text customized away from the generic template wording to describe this.",
         "reactor_shape": "single-module",
         "readme_section_written": true
+      }
+    },
+    "format": {
+      "applied_at": "2026-08-08T12:10:32+00:00",
+      "enabled": false,
+      "files": {},
+      "settings": {
+        "note": "Declined entirely - this repo has no Java source (only src/main/resources/pgp-keys-map.list), nothing for Spotless/palantirJavaFormat to format."
+      }
+    },
+    "license": {
+      "applied_at": "2026-08-08T12:23:56+00:00",
+      "enabled": true,
+      "files": {
+        ".github/workflows/license-compliance.yml": "sha256:4ad51a03e1075675cd3846b170053db51104db63b03357beec79cc1cab46e907",
+        "resources/allowed-licenses.txt": "sha256:aa8a53aa73a6530362cbd8fe0af3d2f550246894e267c4bd4938ca123540fd3c",
+        "scripts/license-check.py": "sha256:9c358a1a1990465147dba1199dc571700c59217c3138b7093276e7a0676ec057"
+      },
+      "settings": {
+        "allowlist_seeded": true,
+        "cyclonedx_applied_by_this_group": false,
+        "note": "cyclonedx-maven-plugin was already present, applied earlier by the release group. This repo has zero runtime dependencies (resource-only jar), so the license check currently passes trivially against 0 components.",
+        "trigger": "push-and-pr"
       }
     },
     "release": {
@@ -37,6 +102,40 @@
         "sbom_attached_to_github_packages_release": false,
         "sbom_enabled": true,
         "versioning": "single-shared"
+      }
+    },
+    "security": {
+      "applied_at": "2026-08-08T12:22:03+00:00",
+      "enabled": true,
+      "files": {
+        ".github/dependabot.yml": "sha256:9d465bb33b96866d2f87bfc4f501248d705c863b1f7b0cc75d4e13e91a62d5ed",
+        ".github/workflows/security-scan.yml": "sha256:452eb1620580ca33d3e3ac35e414cbd4abb8c8bb730c9faf07dd85d20b359ac5",
+        "resources/dependency-check-suppress.xml": "sha256:d67d19a0eca1e281f98955447d6782af4d2f0a84e8ae5e0e11532418c1f00c88",
+        "scripts/close-resolved-issue.sh": "sha256:f6f93e9f059985d25825e8d8bfe7edf553d8f3fa0706f89c9a3da8615d0ab96a",
+        "scripts/comment-on-pr.sh": "sha256:4bece2ff3c60f27af7d3866491aa3e1ccc83b2a80d83c2dae35a48e0cd549ff4",
+        "scripts/nvd-mirror-download-database.sh": "sha256:390dcbeef509f4f1e02ba0807b72c234dfc59d3579f3ff7c5119a89bab5c35c7",
+        "scripts/nvd-mirror-lookup-release.sh": "sha256:a1263ad46d5dca44a5cfd9ba5b1c2c5b9589d37f81d964efb162a7b29350a84e",
+        "scripts/summarize-report.sh": "sha256:ec853527ef6b1dbc0fb8572a8e151c527859602ddcc9660faafe32276207add1"
+      },
+      "settings": {
+        "cvss_threshold": 7,
+        "dependabot_day": "monday",
+        "dependabot_enabled": true,
+        "dependabot_github_actions_enabled": true,
+        "dependabot_group_minor_patch": true,
+        "dependabot_interval": "weekly",
+        "dependabot_time": "06:00",
+        "dependabot_timezone": "Europe/Zurich",
+        "dependency_check_enabled": true,
+        "extra_weekly_cron": true,
+        "issue_tracking_enabled": true,
+        "note": "pgpverify Case B - declined adding a shared base list since this repo IS org.security4media:pgp-keys-map itself, circular to depend on.",
+        "nvd_source": "community-mirror",
+        "pgp_keys_map_source": null,
+        "pgpverify_already_configured": true,
+        "pgpverify_enabled": true,
+        "retention_days": 15,
+        "sarif_upload_enabled": true
       }
     }
   },
