@@ -1515,6 +1515,11 @@ me.fabriciorby:maven-surefire-junit5-tree-reporter = 0x5AC722478DC74B6A1D2060C42
 # different fingerprint here; that turned out to be someone's personal key, not this org key.
 org.security4media.crypto:*      = 0x448C17164DA1EF787059C31C176E655BBA8686E3
 
+# This artifact's own coordinate, signed with the same org key as above. Without this, any
+# consumer with verifyPluginDependencies=true (the config this README recommends) fails to
+# verify the pgp-keys-map plugin dependency jar itself - see issue #20.
+org.security4media:pgp-keys-map  = 0x448C17164DA1EF787059C31C176E655BBA8686E3
+
 ### AWS SDK (transitive dependency of Security4Media components)
 software.amazon.awssdk:*      = 0xFEB9209F2F2F3F4664841E55AC107B386692DADD
 software.amazon.eventstream:* = 0xFEB9209F2F2F3F4664841E55AC107B386692DADD

@@ -20,9 +20,11 @@ maintaining its own copy.
 
 ## Consuming this artifact
 
-Declare it as a `pgpverify-maven-plugin` plugin dependency and reference it via
-a `classpath:` location, exactly like the upstream community list
-(`org.simplify4u:pgp-keys-map`) is already consumed:
+Declare it as a `pgpverify-maven-plugin` plugin dependency and reference it
+with a bare classpath-relative path (leading slash, no scheme prefix - that's
+the syntax the plugin itself uses for a keys map bundled inside a dependency
+jar; `classpath:pgp-keys-map.list` looks more explicit but pgpverify-maven-plugin
+1.19.1 doesn't recognize it and fails with "Could not find resource"):
 
 ```xml
 <plugin>
@@ -39,18 +41,22 @@ a `classpath:` location, exactly like the upstream community list
     <configuration>
         <keysMapLocations>
             <keysMapLocation>
-                <location>classpath:pgp-keys-map.list</location>
+                <location>/pgp-keys-map.list</location>
             </keysMapLocation>
-            <!-- Project-specific additions/overrides, kept in the consuming
-                 repo, loaded after the shared list. -->
+            <!-- Project-specific additions, kept in the consuming repo, loaded
+                 after the shared list. Can only ADD coverage for coordinates
+                 the shared list doesn't have yet - see "Overriding an entry"
+                 below for why it can't replace one that's already there. -->
             <keysMapLocation>
                 <location>${maven.multiModuleProjectDirectory}/pgp-keys-map.local.list</location>
             </keysMapLocation>
         </keysMapLocations>
-        <verifyPlugins>true</verifyPluginDependencies>
+        <verifyPlugins>true</verifyPlugins>
+        <verifyPluginDependencies>true</verifyPluginDependencies>
         <verifyAtypical>true</verifyAtypical>
-        <!-- Fail loudly instead of silently merging if a coordinate appears in
-             both the shared list and the local override. -->
+        <!-- Catches an accidental byte-identical duplicate key entry for the
+             same coordinate. It does NOT catch two DIFFERENT keys declared
+             for the same coordinate across locations - see below. -->
         <failDuplicateKeyItem>true</failDuplicateKeyItem>
     </configuration>
     <dependencies>
@@ -65,23 +71,24 @@ a `classpath:` location, exactly like the upstream community list
 
 ### Overriding an entry from the shared list
 
-`pgpverify-maven-plugin` merges/updates key items rather than cleanly
-replacing them when the same coordinate pattern appears in more than one
-`keysMapLocation`. To genuinely override a shared entry (e.g. a rotated key),
-exclude that coordinate from the shared location instead of just adding a
-conflicting line to the local file:
+You can't, from the consuming project. When the same coordinate pattern
+appears in more than one `keysMapLocation`, `pgpverify-maven-plugin` always
+unions the key items from every location - there's no configuration that
+makes one location's entry replace another's for the same coordinate.
+`excludes` on a `keysMapLocation` filters which of *that file's own* entries
+get loaded (by the special `noSig`/`noKey`/`badSig`/`any` markers, not by
+coordinate); it can't suppress a different location's entry for the same
+coordinate. `failDuplicateKeyItem` only fires on a byte-identical duplicate
+key string for the same coordinate, so it won't catch a local file that adds
+a *different* key for a coordinate the shared list already covers - that
+silently unions both keys as trusted instead of failing.
 
-```xml
-<keysMapLocation>
-    <location>classpath:pgp-keys-map.list</location>
-    <excludes>
-        <exclude>org.example:some-artifact</exclude>
-    </excludes>
-</keysMapLocation>
-```
-
-`failDuplicateKeyItem` (enabled above) turns any accidental, un-excluded
-overlap into a build failure instead of a silent merge.
+In practice this means a local `pgp-keys-map.local.list` can only add
+coverage for coordinates the shared list doesn't have yet. If a shared
+entry needs to change - wrong key, rotated key, compromised key - that has
+to happen here, in this repo: open an issue or PR against
+`src/main/resources/pgp-keys-map.list` rather than trying to shadow it
+locally.
 
 ## Maintaining this list
 
@@ -128,9 +135,20 @@ literal `*` there isn't valid syntax.
 - **Key rotation** - add the new key alongside the old one, never delete it,
   and comment why and when (see the `commons-io`/`commons-codec` entries for
   the pattern).
-- **Revocation or compromise** - negate the key with `!0xKEYID` instead of
-  silently deleting the line (see the `com.stripe`, `net.sourceforge.pmd`,
-  and `io.vavr` entries for examples).
+- **Upstream key revoked at the keyserver level** - if a project's key was
+  revoked upstream and its public key may no longer be fetchable from (some)
+  keyservers, but you still want to trust artifacts already signed with it,
+  negate it with `!0xKEYID` instead of deleting the line (see the
+  `com.stripe` and `net.sourceforge.pmd` entries). This is what `!0xKEYID`
+  actually does - `allowNoPublicKey`, checked only when the public key can't
+  be resolved. It is **not** a way to mark a key as no longer trusted: a
+  negated entry never blocks a match against a separate, non-negated entry
+  for the same fingerprint, and it does nothing if the public key is still
+  normally fetchable (which is the case for any key Security4Media itself
+  controls).
+- **One of our own keys is compromised** - negation doesn't help here. Delete
+  or replace the positive entry (`org.security4media.crypto:*`, etc.)
+  outright; there's no safe alternative that keeps the old line in place.
 - **Periodic review** - broad or unbounded entries are worth a second look
   whenever this file is already open for something else, especially for a
   key nobody's checked in years.
