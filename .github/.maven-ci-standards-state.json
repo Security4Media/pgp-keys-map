@@ -1,23 +1,25 @@
 {
   "groups": {
     "badges": {
-      "applied_at": "2026-08-08T12:31:21+00:00",
+      "applied_at": "2026-08-10T17:19:02+00:00",
       "enabled": true,
       "files": {
-        "README.md": "sha256:90547d232ac2b987248b203d04c5360aa1a066942d931980b01b322c5df8b1b5"
+        "README.md": "sha256:4b81ff34ac5a2a37c314a179423b4e531ff223b91589592b2af7747a125debec"
       },
       "settings": {
         "build_workflow_file": "build-test.yml",
         "gist_id": "2561f0cb8277be7395802851def325bd",
         "gist_user": "BadrTad",
+        "jdk_version": "17",
         "license_file": "LICENSE",
         "license_name": "Apache-2.0",
-        "note": "coverage/pmd/spotbugs excluded - no Java source in this repo. pgp-keys-map badge excluded - this repo IS the shared list, doesn't depend on one.",
+        "note": "coverage/pmd/spotbugs excluded - no Java source in this repo. pgp-keys-map badge excluded - this repo IS the shared list, doesnt depend on one. java badge added on update to 0.4.5 (new option, not available at 0.4.0), detected jdk_version 17 from pom.xml.",
         "pgp_keys_map_label": null,
         "pgp_keys_map_url": null,
         "repo_visibility": "PUBLIC",
         "selected_badges": [
           "build",
+          "java",
           "vulnerabilities",
           "release",
           "sbom",
