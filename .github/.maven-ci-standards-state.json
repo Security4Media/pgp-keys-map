@@ -1,23 +1,25 @@
 {
   "groups": {
     "badges": {
-      "applied_at": "2026-08-08T12:31:21+00:00",
+      "applied_at": "2026-08-10T17:19:02+00:00",
       "enabled": true,
       "files": {
-        "README.md": "sha256:90547d232ac2b987248b203d04c5360aa1a066942d931980b01b322c5df8b1b5"
+        "README.md": "sha256:4b81ff34ac5a2a37c314a179423b4e531ff223b91589592b2af7747a125debec"
       },
       "settings": {
         "build_workflow_file": "build-test.yml",
         "gist_id": "2561f0cb8277be7395802851def325bd",
         "gist_user": "BadrTad",
+        "jdk_version": "17",
         "license_file": "LICENSE",
         "license_name": "Apache-2.0",
-        "note": "coverage/pmd/spotbugs excluded - no Java source in this repo. pgp-keys-map badge excluded - this repo IS the shared list, doesn't depend on one.",
+        "note": "coverage/pmd/spotbugs excluded - no Java source in this repo. pgp-keys-map badge excluded - this repo IS the shared list, doesnt depend on one. java badge added on update to 0.4.5 (new option, not available at 0.4.0), detected jdk_version 17 from pom.xml.",
         "pgp_keys_map_label": null,
         "pgp_keys_map_url": null,
         "repo_visibility": "PUBLIC",
         "selected_badges": [
           "build",
+          "java",
           "vulnerabilities",
           "release",
           "sbom",
@@ -105,17 +107,18 @@
       }
     },
     "security": {
-      "applied_at": "2026-08-08T12:22:03+00:00",
+      "applied_at": "2026-08-10T17:29:20+00:00",
       "enabled": true,
       "files": {
         ".github/dependabot.yml": "sha256:9d465bb33b96866d2f87bfc4f501248d705c863b1f7b0cc75d4e13e91a62d5ed",
-        ".github/workflows/security-scan.yml": "sha256:452eb1620580ca33d3e3ac35e414cbd4abb8c8bb730c9faf07dd85d20b359ac5",
-        "resources/dependency-check-suppress.xml": "sha256:d67d19a0eca1e281f98955447d6782af4d2f0a84e8ae5e0e11532418c1f00c88",
-        "scripts/close-resolved-issue.sh": "sha256:f6f93e9f059985d25825e8d8bfe7edf553d8f3fa0706f89c9a3da8615d0ab96a",
-        "scripts/comment-on-pr.sh": "sha256:4bece2ff3c60f27af7d3866491aa3e1ccc83b2a80d83c2dae35a48e0cd549ff4",
-        "scripts/nvd-mirror-download-database.sh": "sha256:390dcbeef509f4f1e02ba0807b72c234dfc59d3579f3ff7c5119a89bab5c35c7",
-        "scripts/nvd-mirror-lookup-release.sh": "sha256:a1263ad46d5dca44a5cfd9ba5b1c2c5b9589d37f81d964efb162a7b29350a84e",
-        "scripts/summarize-report.sh": "sha256:ec853527ef6b1dbc0fb8572a8e151c527859602ddcc9660faafe32276207add1"
+        ".github/workflows/security-scan.yml": "sha256:1ddc7ada617158da1bd8af00c16985dac599542cf09b45c222513b8810cca386",
+        "resources/dependency-check-suppress.xml": "sha256:ffdaf781c3a0fbe1289a7cab3d27928a6171c027ccbca44aa4687632e36fa24d",
+        "scripts/badge-color.sh": "sha256:21c5932f182da274855f793bf2e6d544362e90abf599bae99f42b90dc2fd26f7",
+        "scripts/close-resolved-issue.sh": "sha256:6801408d1b174299188ef1614726d7bc7332a7cda198cf83c80d4ee7a27fc697",
+        "scripts/comment-on-pr.sh": "sha256:ae6deaf54935c9e35d23dfd0e1044c212c25d65a7625ae546f6401d35bd26b8f",
+        "scripts/nvd-mirror-download-database.sh": "sha256:4f09706d24e797ed7378f8580b8670867cb3310f3415815cab48661580c7b03c",
+        "scripts/nvd-mirror-lookup-release.sh": "sha256:59ac64aa10ee7974b8c8880e1581cb7ccb05c0eb5df8cd5f2d766dadb34b8a5b",
+        "scripts/summarize-report.sh": "sha256:5f3cc73df62df58ea99401541256a191229ab510838e6e82b04b7523010bca1c"
       },
       "settings": {
         "cvss_threshold": 7,
@@ -129,7 +132,7 @@
         "dependency_check_enabled": true,
         "extra_weekly_cron": true,
         "issue_tracking_enabled": true,
-        "note": "pgpverify Case B - declined adding a shared base list since this repo IS org.security4media:pgp-keys-map itself, circular to depend on.",
+        "note": "pgpverify Case B - declined adding a shared base list since this repo IS org.security4media:pgp-keys-map itself, circular to depend on. update to 0.4.5 added the missing vulnerabilities-badge push steps + scripts/badge-color.sh (badges was configured after security originally ran, so the badge block had been stripped) and continue-on-error:true on the SARIF upload step (0.4.3 fix).",
         "nvd_source": "community-mirror",
         "pgp_keys_map_source": null,
         "pgpverify_already_configured": true,
@@ -139,5 +142,5 @@
       }
     }
   },
-  "plugin_version": "0.4.0"
+  "plugin_version": "0.4.5"
 }

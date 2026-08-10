@@ -126,6 +126,7 @@ jobs:
       # but findings should still surface in the Security tab.
       - name: Upload dependency-check SARIF to GitHub code scanning
         if: always()
+        continue-on-error: true
         uses: github/codeql-action/upload-sarif@5595ccaf912efad79be6eef63a5619ff05969be3 # v4.37.6
         with:
           sarif_file: target/dependency-check-report.sarif
@@ -163,3 +164,24 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_LABEL: dependency-check
         run: scripts/close-resolved-issue.sh
+
+      # Publishes the vulnerability count to the Gist the README's "vulnerabilities" badge reads
+      # from. Restricted to push/workflow_dispatch/schedule (never pull_request) so a fork PR
+      # can't publish a public badge update.
+      - name: Determine vulnerability badge color
+        id: vuln_color
+        if: always() && github.event_name != 'pull_request'
+        env:
+          MODE: zero
+          VALUE: ${{ steps.summarize.outputs.vulnerability_count }}
+        run: echo "value=$(scripts/badge-color.sh)" >> "$GITHUB_OUTPUT"
+      - name: Update vulnerability count badge
+        if: always() && github.event_name != 'pull_request'
+        uses: schneegans/dynamic-badges-action@28b0fa8bdeb46170ac397105ece0c1fe58f68910 # v1.9.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: ${{ vars.GIST_ID }}
+          filename: vulnerabilities.json
+          label: vulnerabilities
+          message: ${{ steps.summarize.outputs.vulnerability_count }}
+          color: ${{ steps.vuln_color.outputs.value }}
